@@ -1,43 +1,43 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # allow frontend to call backend
 
+# 1️⃣ Default status route
 @app.route("/")
 def home():
-    return jsonify({"message": "SafeTrip backend running!"})
+    return jsonify({"message": "SafeTrip Backend is running!"})
 
-@app.route("/predict", methods=["GET"])
-def predict():
-    # Get query parameters (dummy inputs)
-    location = request.args.get("location", "Hyderabad")
-    date = request.args.get("date", "2025-09-25")
-    activity = request.args.get("activity", "hiking")
+# 2️⃣ Status check route
+@app.route("/status")
+def status():
+    return jsonify({"status": "ok", "version": "1.0"})
 
-    # Dummy response (replace later with ML model output)
-    response = {
-        "location": location,
-        "date": date,
-        "activity": activity,
-        "rain_probability": "30%",  # dummy value
-        "comfort_index": 72         # dummy value
-    }
-    return jsonify(response)
-
-@app.route("/safety", methods=["GET"])
-def safety():
+# 3️⃣ Trip planner dummy route
+@app.route("/trip")
+def trip():
     return jsonify({
-        "uv_index": 5,
-        "flood_alert": False,
-        "heat_alert": True
+        "trip_id": 101,
+        "location": "Hyderabad",
+        "best_time": "6:00 AM - 9:00 AM",
+        "comfort_index": 85
     })
 
-@app.route("/weather", methods=["GET"])
-def weather():
+# 4️⃣ Safety alerts dummy route
+@app.route("/alerts")
+def alerts():
     return jsonify({
-        "temperature": 28,
-        "humidity": 70,
-        "wind_speed": 12
+        "uv_index": "High",
+        "heat_warning": False,
+        "rain_alert": True,
+        "message": "Carry umbrella, possible showers."
     })
+
+# 5️⃣ Health check route
+@app.route("/health")
+def health():
+    return jsonify({"server": "healthy", "uptime": "running"})
 
 if __name__ == "__main__":
     app.run(debug=True)
